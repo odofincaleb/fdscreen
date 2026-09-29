@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FDSCREEN - Professional Desktop Screen Recorder</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 50%, #2980b9 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%);
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            color: white;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        .hero .subtitle {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+        
+        .hero .description {
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+            opacity: 0.8;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: #e74c3c;
+            color: white;
+            padding: 18px 40px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+            border: none;
+            cursor: pointer;
+        }
+        
+        .cta-button:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+        }
+        
+        /* Content Sections */
+        .content-section {
+            padding: 80px 0;
+            position: relative;
+        }
+        
+        .section-title {
+            font-size: 3rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 5px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            margin: 20px auto;
+            border-radius: 3px;
+        }
+        
+        /* Features Section */
+        .features-section {
+            background: #f8f9fa;
+            color: #333;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 8px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid #e9ecef;
+            position: relative;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            border-color: #3498db;
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            display: block;
+            color: #3498db;
+        }
+        
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .feature-card p {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #666;
+        }
+        
+        /* Benefits Section */
+        .benefits-section {
+            background: white;
+            color: #333;
+        }
+        
+        .benefits-list {
+            list-style: none;
+            padding: 0;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .benefits-list li {
+            background: #f8f9fa;
+            margin: 15px 0;
+            padding: 25px 30px;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+            position: relative;
+            padding-left: 60px;
+            transition: all 0.3s ease;
+            border: 1px solid #e9ecef;
+        }
+        
+        .benefits-list li:hover {
+            transform: translateX(5px);
+            background: #e3f2fd;
+            border-left-color: #2980b9;
+        }
+        
+        .benefits-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 20px;
+            top: 25px;
+            color: #27ae60;
+            font-weight: bold;
+            font-size: 1.2rem;
+            background: #d5f4e6;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Usage Section */
+        .usage-section {
+            background: #f8f9fa;
+            color: #333;
+        }
+        
+        .usage-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+        }
+        
+        .step {
+            background: white;
+            color: #333;
+            padding: 40px 30px;
+            border-radius: 8px;
+            text-align: center;
+            position: relative;
+            border: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .step:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            border-color: #3498db;
+        }
+        
+        .step-number {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #e74c3c;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+        
+        .step h3 {
+            margin: 30px 0 20px 0;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .step p {
+            font-size: 1rem;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        /* Keyboard Shortcuts */
+        .shortcuts-section {
+            background: white;
+            color: #333;
+        }
+        
+        .keyboard-shortcuts {
+            background: #f8f9fa;
+            padding: 40px;
+            border-radius: 8px;
+            margin: 40px 0;
+            border: 1px solid #e9ecef;
+        }
+        
+        .shortcut-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #dee2e6;
+            transition: all 0.3s ease;
+        }
+        
+        .shortcut-item:hover {
+            background: #e3f2fd;
+            padding-left: 10px;
+        }
+        
+        .shortcut-key {
+            background: #3498db;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
+        }
+        
+        /* System Requirements */
+        .requirements-section {
+            background: #f8f9fa;
+            color: #333;
+        }
+        
+        /* Testimonial */
+        .testimonial-section {
+            background: white;
+            color: #333;
+        }
+        
+        .testimonial {
+            background: #f8f9fa;
+            padding: 50px;
+            border-radius: 8px;
+            margin: 40px 0;
+            border-left: 5px solid #3498db;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .testimonial::before {
+            content: '"';
+            position: absolute;
+            top: -10px;
+            left: 30px;
+            font-size: 4rem;
+            color: #3498db;
+            font-weight: bold;
+        }
+        
+        .testimonial-text {
+            font-style: italic;
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            color: #555;
+            line-height: 1.7;
+        }
+        
+        .testimonial-author {
+            font-weight: 600;
+            color: #3498db;
+            font-size: 1.1rem;
+        }
+        
+        /* Pricing */
+        .pricing-section {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            text-align: center;
+            padding: 100px 0;
+            position: relative;
+        }
+        
+        .pricing-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .price {
+            font-size: 4rem;
+            font-weight: 700;
+            margin: 30px 0;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        .price-period {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+        
+        .pricing-description {
+            font-size: 1.2rem;
+            margin: 30px 0;
+            opacity: 0.9;
+        }
+        
+        /* Footer */
+        .footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 60px 0;
+        }
+        
+        .footer a {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+            
+            .hero .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .hero .description {
+                font-size: 1rem;
+            }
+            
+            .section-title {
+                font-size: 2.5rem;
+            }
+            
+            .feature-card, .step, .testimonial {
+                padding: 30px 20px;
+            }
+            
+            .benefits-list li {
+                padding: 20px 25px;
+                padding-left: 50px;
+            }
+            
+            .price {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1>🎥 FDSCREEN</h1>
+                <p class="subtitle">Professional Desktop Screen Recorder</p>
+                <p class="description">Capture, record, and share your screen with crystal-clear quality</p>
+                <a href="#download" class="cta-button">Download Now - FREE</a>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="content-section features-section">
+            <div class="container">
+                <h2 class="section-title">🚀 Powerful Features</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🎥</div>
+                        <h3>High-Quality Recording</h3>
+                        <p>Record in stunning 720p, 1080p, 1440p, or 4K resolution with customizable frame rates (24, 30, or 60 FPS) for professional-quality videos.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">🖥️</div>
+                        <h3>Multiple Recording Sources</h3>
+                        <p>Choose to record your entire screen, specific windows, or applications. Perfect for tutorials, presentations, and demonstrations.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">🎵</div>
+                        <h3>Advanced Audio Recording</h3>
+                        <p>Record system audio, microphone input, or both simultaneously. Perfect for creating tutorials, webinars, and gaming content.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">⌨️</div>
+                        <h3>Smart Keyboard Shortcuts</h3>
+                        <p>Control recording with intuitive shortcuts. Start (Ctrl+R), Pause/Resume (Ctrl+P), and Stop (Ctrl+S) for seamless workflow.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">⏯️</div>
+                        <h3>Pause & Resume</h3>
+                        <p>Pause and resume your recordings without losing quality. Perfect for taking breaks during long recording sessions.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">💾</div>
+                        <h3>Multiple Export Formats</h3>
+                        <p>Export your recordings as WebM or MP4 files with automatic codec detection for maximum compatibility across platforms.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Benefits Section -->
+        <section class="content-section benefits-section">
+            <div class="container">
+                <h2 class="section-title">✨ Why Choose FDSCREEN?</h2>
+                <ul class="benefits-list">
+                    <li><strong>Professional Quality:</strong> Record in up to 4K resolution with customizable frame rates for crystal-clear videos</li>
+                    <li><strong>User-Friendly Interface:</strong> Clean, intuitive design that makes screen recording accessible to everyone</li>
+                    <li><strong>Cross-Platform Support:</strong> Works seamlessly on Windows, macOS, and Linux operating systems</li>
+                    <li><strong>Lightweight & Fast:</strong> Built with Electron for optimal performance without compromising system resources</li>
+                    <li><strong>No Watermarks:</strong> Create professional recordings without any watermarks or branding</li>
+                    <li><strong>Real-time Preview:</strong> Preview your recordings before saving with built-in video player controls</li>
+                    <li><strong>Auto-Minimize:</strong> Automatically minimizes to system tray during recording for uninterrupted workflow</li>
+                    <li><strong>Countdown Timer:</strong> 3-second visual countdown before recording starts for perfect timing</li>
+                    <li><strong>Secure & Private:</strong> All recordings are stored locally on your device - no cloud uploads required</li>
+                    <li><strong>Regular Updates:</strong> Continuous improvements and new features based on user feedback</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Usage Section -->
+        <section class="content-section usage-section">
+            <div class="container">
+                <h2 class="section-title">📋 How to Use FDSCREEN</h2>
+                <div class="usage-steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h3>Launch & Select</h3>
+                        <p>Open FDSCREEN and choose your recording source from available screens and windows</p>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h3>Configure Settings</h3>
+                        <p>Adjust video quality, frame rate, audio settings, and output format to match your needs</p>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h3>Start Recording</h3>
+                        <p>Click "Start Recording" and enjoy the 3-second countdown before your recording begins</p>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <h3>Control & Manage</h3>
+                        <p>Use pause/resume controls or keyboard shortcuts to manage your recording session</p>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">5</div>
+                        <h3>Preview & Save</h3>
+                        <p>Preview your recording with built-in controls, then save in your preferred format</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Keyboard Shortcuts -->
+        <section class="content-section shortcuts-section">
+            <div class="container">
+                <h2 class="section-title">⌨️ Keyboard Shortcuts</h2>
+                <div class="keyboard-shortcuts">
+                    <h3>Local Shortcuts (App Focused)</h3>
+                    <div class="shortcut-item">
+                        <span>Start Recording</span>
+                        <span class="shortcut-key">Ctrl + R</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <span>Pause/Resume Recording</span>
+                        <span class="shortcut-key">Ctrl + P</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <span>Pause/Resume Recording (Alternative)</span>
+                        <span class="shortcut-key">Ctrl + Space</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <span>Stop Recording</span>
+                        <span class="shortcut-key">Ctrl + S</span>
+                    </div>
+                    
+                    <h3 style="margin-top: 30px;">Global Shortcuts (Works When Minimized)</h3>
+                    <div class="shortcut-item">
+                        <span>Start Recording</span>
+                        <span class="shortcut-key">Ctrl + Shift + R</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <span>Pause/Resume Recording</span>
+                        <span class="shortcut-key">Ctrl + Shift + P</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <span>Pause/Resume Recording (Alternative)</span>
+                        <span class="shortcut-key">Ctrl + Shift + Space</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <span>Stop Recording</span>
+                        <span class="shortcut-key">Ctrl + Shift + S</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- System Requirements -->
+        <section class="content-section requirements-section">
+            <div class="container">
+                <h2 class="section-title">💻 System Requirements</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🪟</div>
+                        <h3>Windows</h3>
+                        <p>Windows 10 or later<br>Minimum 4GB RAM<br>100MB free disk space</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">🍎</div>
+                        <h3>macOS</h3>
+                        <p>macOS 10.14 or later<br>Minimum 4GB RAM<br>100MB free disk space</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">🐧</div>
+                        <h3>Linux</h3>
+                        <p>Ubuntu 18.04 or equivalent<br>Minimum 4GB RAM<br>100MB free disk space</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonial -->
+        <section class="content-section testimonial-section">
+            <div class="container">
+                <h2 class="section-title">💬 What Users Say</h2>
+                <div class="testimonial">
+                    <div class="testimonial-text">
+                        "FDSCREEN has revolutionized how I create content for my online courses. The quality is outstanding, and the interface is so intuitive that I can focus on teaching rather than figuring out complex software. The pause/resume feature is a game-changer for long recording sessions!"
+                    </div>
+                    <div class="testimonial-author">- Sarah Johnson, Online Course Creator</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing -->
+        <section class="pricing-section" id="download">
+            <div class="container">
+                <div class="pricing-content">
+                    <h2>🎉 Download FDSCREEN</h2>
+                    <div class="price">FREE</div>
+                    <div class="price-period">No hidden costs, no subscriptions</div>
+                    <p class="pricing-description">Professional screen recording software at no cost</p>
+                    <a href="#" class="cta-button" style="background: white; color: #667eea;">Download Now</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <p>© 2024 FDSCREEN - Professional Desktop Screen Recorder</p>
+                <p>Developed by <a href="https://fideantech.com" target="_blank">Fideantech</a></p>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

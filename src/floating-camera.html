@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Camera Overlay</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: transparent;
+      user-select: none;
+    }
+    .wrap {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+      background: #111;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+      cursor: move;
+    }
+    .wrap.square { border-radius: 10px; }
+    .wrap.rounded { border-radius: 22px; }
+    .wrap.circle { border-radius: 50%; }
+    #frame {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      background: #111;
+      pointer-events: none;
+    }
+    .wrap.square #frame,
+    .wrap.rounded #frame { border-radius: inherit; }
+    .wrap.circle #frame { border-radius: 50%; }
+    .toolbar {
+      position: absolute;
+      left: 50%;
+      bottom: 10px;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 6px;
+      opacity: 0;
+      transition: opacity 0.15s ease;
+    }
+    .wrap:hover .toolbar { opacity: 1; }
+    .tool-btn {
+      border: none;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      color: #fff;
+      background: rgba(0, 0, 0, 0.65);
+    }
+    .tool-btn:hover { background: rgba(99, 102, 241, 0.9); }
+    .hint {
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgba(255, 255, 255, 0.8);
+      font: 600 10px/1.2 system-ui, sans-serif;
+      background: rgba(0, 0, 0, 0.45);
+      padding: 4px 8px;
+      border-radius: 999px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.15s ease;
+      white-space: nowrap;
+    }
+    .wrap:hover .hint { opacity: 1; }
+  </style>
+</head>
+<body>
+  <div class="wrap square" id="wrap">
+    <img id="frame" alt="Camera">
+    <div class="hint">Drag to move</div>
+    <div class="toolbar">
+      <button class="tool-btn" id="shapeBtn" title="Change shape">Circle</button>
+      <button class="tool-btn" id="hideBtn" title="Hide camera">Hide</button>
+    </div>
+  </div>
+  <script>
+    const wrap = document.getElementById('wrap');
+    const frame = document.getElementById('frame');
+    const shapeBtn = document.getElementById('shapeBtn');
+    const hideBtn = document.getElementById('hideBtn');
+    let shape = 'square';
+    let dragging = false;
+    const shapes = ['square', 'rounded', 'circle'];
+
+    function nextShapeLabel(current) {
+      if (current === 'square') return 'Rounded';
+      if (current === 'rounded') return 'Circle';
+      return 'Square';
+    }
+
+    function applyShape(next) {
+      shape = next || 'square';
+      wrap.className = `wrap ${shape}`;
+      shapeBtn.textContent = nextShapeLabel(shape);
+      window.electronAPI?.setFloatingCameraShape?.(shape);
+    }
+
+    shapeBtn.addEventListener('click', (event) => {
+      event.stopPropagation();
+      const idx = shapes.indexOf(shape);
+      applyShape(shapes[(idx + 1) % shapes.length]);
+    });
+
+    hideBtn.addEventListener('click', (event) => {
+      event.stopPropagation();
+      window.electronAPI?.hideFloatingCamera?.();
+    });
+
+    wrap.addEventListener('pointerdown', (event) => {
+      if (event.target.closest('.toolbar')) {
+        return;
+      }
+      dragging = true;
+      wrap.setPointerCapture(event.pointerId);
+      window.electronAPI?.startFloatingCameraDrag?.({
+        screenX: event.screenX,
+        screenY: event.screenY
+      });
+    });
+
+    wrap.addEventListener('pointermove', (event) => {
+      if (!dragging) {
+        return;
+      }
+      window.electronAPI?.moveFloatingCameraDrag?.({
+        screenX: event.screenX,
+        screenY: event.screenY
+      });
+    });
+
+    function endDrag(event) {
+      if (!dragging) {
+        return;
+      }
+      dragging = false;
+      try {
+        wrap.releasePointerCapture(event.pointerId);
+      } catch (_err) {
+        // ignore
+      }
+      window.electronAPI?.endFloatingCameraDrag?.();
+    }
+
+    wrap.addEventListener('pointerup', endDrag);
+    wrap.addEventListener('pointercancel', endDrag);
+
+    if (window.electronAPI?.onFloatingCameraConfig) {
+      window.electronAPI.onFloatingCameraConfig((config) => {
+        if (config?.stop) {
+          frame.removeAttribute('src');
+          return;
+        }
+        applyShape(config.shape || 'square');
+      });
+    }
+
+    if (window.electronAPI?.onFloatingCameraFrame) {
+      window.electronAPI.onFloatingCameraFrame((dataUrl) => {
+        if (dataUrl) {
+          frame.src = dataUrl;
+        }
+      });
+    }
+  </script>
+</body>
+</html>
