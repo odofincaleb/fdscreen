@@ -15,6 +15,10 @@ app.commandLine.appendSwitch(
   'WebRtcAllowWgcScreenCapturer,WebRtcAllowWgcWindowCapturer'
 );
 
+if (process.platform === 'win32') {
+  app.setAppUserModelId('com.screenrecorder.app');
+}
+
 let mainWindow = null;
 let floatingController = null;
 let floatingCamera = null;
@@ -46,11 +50,24 @@ function positionFloatingCamera(win, shape = floatingCameraShape) {
   });
 }
 
+function resolveAppIcon() {
+  const candidates = [
+    path.join(__dirname, 'assets', 'icon.ico'),
+    path.join(__dirname, 'assets', 'icon.png'),
+    path.join(__dirname, '..', 'assets', 'icon.ico'),
+    path.join(__dirname, '..', 'assets', 'icon.png')
+  ];
+  return candidates.find((candidate) => fs.existsSync(candidate)) || undefined;
+}
+
 function createWindow() {
+  const icon = resolveAppIcon();
   mainWindow = new BrowserWindow({
     width: 420,
     height: 640,
     show: false,
+    icon,
+    title: 'FDSCREEN',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
@@ -60,6 +77,14 @@ function createWindow() {
       backgroundThrottling: false
     }
   });
+
+  if (icon) {
+    try {
+      mainWindow.setIcon(icon);
+    } catch (_err) {
+      // ignore
+    }
+  }
 
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
 

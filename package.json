@@ -22,7 +22,8 @@
   "license": "MIT",
   "devDependencies": {
     "electron": "^27.0.0",
-    "electron-builder": "^24.6.4"
+    "electron-builder": "^24.6.4",
+    "rcedit": "^5.0.2"
   },
   "dependencies": {
     "ffmpeg-static": "^5.3.0",
@@ -30,12 +31,14 @@
   },
   "build": {
     "appId": "com.screenrecorder.app",
-    "productName": "Screen Recorder",
+    "productName": "FDSCREEN",
     "directories": {
       "output": "dist"
     },
+    "afterPack": "./build/afterPack.js",
     "files": [
       "src/**/*",
+      "assets/**/*",
       "node_modules/**/*"
     ],
     "asarUnpack": [
@@ -63,7 +66,10 @@
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
-      "shortcutName": "FDSCREEN"
+      "shortcutName": "FDSCREEN",
+      "installerIcon": "assets/icon.ico",
+      "uninstallerIcon": "assets/icon.ico",
+      "installerHeaderIcon": "assets/icon.ico"
     },
     "mac": {
       "target": "dmg",
